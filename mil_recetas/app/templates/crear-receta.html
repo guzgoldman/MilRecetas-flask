@@ -22,20 +22,29 @@
             </div>
             <nav class="col-lg-6">
                 <ul id="menu-list" class="nav">
-                    <li><a href="{{ url_for('index') }}#veggie">Veggie</a></li>
+                    <li><a href="{{ url_for('mostrar_recetas') }}">Recetas</a></li>
                     <li><a href="{{ url_for('index') }}#trending">Tendencias</a></li>
-                    <li><a href="{{ url_for('index') }}#postres">Postres</a></li>
+                    <li><a href="{{ url_for('crear_receta') }}">Crear receta</a></li>
                 </ul>
             </nav>
             <div id="user-large" class="col-lg-3">
-                <div class="user">
-                    <i class="fa-regular fa-user"></i>
-                    <a href="{{ url_for('login') }}">Ingresa a tu cuenta</a>
-                </div>
+                {% if current_user.is_authenticated %}
+                    <div class="user">
+                        <i class="fa-regular fa-user"></i>
+                        <a href="{{ url_for('profile') }}">Mi perfil</a>
+                    </div>
+                    <div class="user">
+                        <a href="{{ url_for('logout') }}">Cerrar sesión</a>
+                    </div>
+                {% else %}
+                    <div class="user">
+                        <i class="fa-regular fa-user"></i>
+                        <a href="{{ url_for('login') }}">Ingresa a tu cuenta</a>
+                    </div>
+                {% endif %}
             </div>
             <div class="navbar-button col-4 col-lg-4">
-                <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas"
-                    data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
+                <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                     <i class="fa-solid fa-bars"></i>
                 </button>
@@ -47,9 +56,9 @@
             </div>
             <div class="offcanvas-body">
                 <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
-                    <li><a href="{{ url_for('index') }}#veggie">Veggie</a></li>
+                    <li><a href="{{ url_for('mostrar_recetas') }}">Recetas</a></li>
                     <li><a href="{{ url_for('index') }}#trending">Tendencias</a></li>
-                    <li><a href="{{ url_for('index') }}#postres">Postres</a></li>
+                    <li><a href="{{ url_for('crear_receta') }}">Crear receta</a></li>
                 </ul>
                 <div class="user"><a class="text-md-white" href="{{ url_for('login') }}">Ingresa a tu cuenta</a></div>
             </div>
@@ -58,13 +67,11 @@
 
     <main>
         <div class="login">
-            <form method="POST" action="/api/recetas/" enctype="multipart/form-data">
+            <form method="POST" action="/crear-receta" enctype="multipart/form-data">
                 <h1>Crea tu receta</h1>
                 <div class="form-group">
                     <label for="nombre_receta">Título:</label>
                     <input type="text" id="nombre_receta" name="nombre_receta" placeholder="Ingrese el título de la receta" required>
-                    <label for="autor">Autor:</label>
-                    <input type="text" id="autor" name="autor" placeholder="Ingrese el nombre del autor" required>
                 </div>
                 <div class="form-group">
                     <label for="descripcion">Descripción:</label>
