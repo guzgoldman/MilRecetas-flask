@@ -239,7 +239,6 @@ main {
     border-radius: 15px;
     overflow: hidden;
     box-shadow: 8px 5px 2px 1px #000000;
-    transition: all .5s;
 }
 
 .recipe li a {
@@ -250,10 +249,6 @@ main {
     width: 100%;
     border: 2px solid #ffa7e4;
     border-radius: 15px;
-}
-
-.recipe li:hover{
-    transform: translateY(-30px);
 }
 
 .recipe-photo {

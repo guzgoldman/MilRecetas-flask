@@ -62,40 +62,52 @@
         </div>
     </header>
 
-    <main>
-        <h1>Mi Perfil</h1>
+    <main class="container">
+        <div class="row">
+            <div class="col-lg-4 col-md-12 mb-4">
+                <h2 class="text-center">Mi Perfil</h2>
 
-        <p><strong>Nombre de usuario:</strong> {{ nombre_usuario }}</p>
-        <p><strong>Email:</strong> {{ email }}</p>
-        <h1>Mis Recetas</h1>
+                <p class="text-center"><strong>Nombre de usuario:</strong> {{ nombre_usuario }}</p>
+                <p class="text-center"><strong>Email:</strong> {{ email }}</p>
+            </div>
 
-    <ul>
-        {% for receta in recetas %}
-            <li>
-                <h2>{{ receta.nombre_receta }}</h2>
-                <p>Categoría: {{ receta.categoria }}</p>
+            <div class="col-lg-4 col-md-12 mb-4">
+                <h2 class="text-center">Mis Recetas</h2>
+                <ul class="recipe">
+                    {% for receta in recetas %}
+                            <li>
+                                <a href="{{ url_for('ver_receta', id_receta=receta.id_receta) }}">
+                                    <div class="recipe-description">
+                                        <p class="recipe-title">{{ receta.nombre_receta }}</p>
+                                        <p class="price">Ver receta</p>
+                                    </div>
+                                </a>
+                                <button onclick="confirmarEliminacion('{{ receta.id_receta }}')">Eliminar esta receta</button>
+                            </li>
+                    {% endfor %}
+                </ul>
+            </div>
 
-                <button onclick="confirmarEliminacion('{{ receta.id_receta }}')">Eliminar</button>
-            </li>
-        {% endfor %}
-    </ul>
-
-    <script>
-        function confirmarEliminacion(id_receta) {
-            if (confirm("¿Estás seguro de que quieres eliminar esta receta?")) {
-                fetch(`/borrar/${id_receta}`, { method: 'POST' })
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error("Error al eliminar la receta.");
-                        }
-                        location.reload();
-                    })
-                    .catch(error => {
-                        alert(error);
-                    });
-            }
-        }
-    </script>
+            <div class="col-lg-4 col-md-12 mb-4">
+                <h2 class="text-center">Mis recetas guardadas</h2>
+                <ul class="recipe">
+                    {% if recetas_guardadas %}
+                        {% for receta_guardada in recetas_guardadas %}
+                            <li>
+                                <a href="{{ url_for('ver_receta', id_receta=receta_guardada.id_receta) }}">
+                                    <div class="recipe-description">
+                                        <p class="recipe-title">{{ receta_guardada.nombre_receta }}</p>
+                                        <p class="price">Ver receta</p>
+                                    </div>
+                                </a>
+                            </li>
+                        {% endfor %}
+                    {% else %}
+                            <p>No tienes recetas guardadas</p>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
     </main>
 
     <footer>
@@ -134,5 +146,37 @@
             <p>Copyright &copy; 2024 - Grupo 4 Codo a Codo (Full Stack Python)</p>
         </div>
     </footer>
+
+    <script>
+        function confirmarEliminacion(id_receta) {
+            if (confirm("¿Estás seguro de que quieres eliminar esta receta?")) {
+                fetch(`/borrar/${id_receta}`, { method: 'POST' })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error("Error al eliminar la receta.");
+                        }
+                        location.reload();
+                    })
+                    .catch(error => {
+                        alert(error);
+                    });
+            }
+        }
+    </script>
+
+    <style>
+        .recipe li {
+            flex-direction: column;
+            height: 200px;
+        }
+
+        .recipe li button {
+            margin: 0;
+            background-color: #0B4A4A;
+            color: white;
+            border: 2px solid #ffa7e4;
+            border-radius: 0;
+        }
+    </style>
 </body>
 </html>

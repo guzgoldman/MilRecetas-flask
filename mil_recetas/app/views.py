@@ -1,7 +1,7 @@
 from flask import render_template, jsonify, request, redirect, url_for, session, flash
 from flask_cors import CORS
 from app import app
-from app.models import Receta, Usuario
+from app.models import Receta, Usuario, RecetaGuardada
 from werkzeug.utils import secure_filename
 import os
 from app import get_db
@@ -21,16 +21,17 @@ def archivo_permitido(filename):
 @app.route('/crear-receta', methods=['POST', 'GET'])
 def crear_receta():
     if not current_user.is_authenticated:
+        flash('Debe iniciar sesión para crear una receta', 'warning')
         return redirect(url_for('login'))
 
     if request.method == 'POST':
         try:
             if 'ruta_imagen' not in request.files:
-                return jsonify({'error': 'No se proporcionó ningún archivo'}), 400
+                flash('No se adjuntó ningún archivo', 'error')
 
             file = request.files['ruta_imagen']
             if file.filename == '':
-                return jsonify({'error': 'No se seleccionó ningún archivo'}), 400
+                flash('No se seleccionó ningún archivo', 'error')
 
             if file and archivo_permitido(file.filename):
                 filename = secure_filename(file.filename)
@@ -49,7 +50,7 @@ def crear_receta():
 
                 return redirect(url_for('ver_receta', id_receta=nueva_receta.id_receta))
             else:
-                return jsonify({'error': 'El archivo adjuntado no es válido'}), 400
+                flash('El archivo adjunto no es válido', 'error')
 
         except Exception as e:
             return jsonify({'error': str(e)}), 500
@@ -61,10 +62,10 @@ def ver_receta(id_receta):
     receta = Receta.mostrar_por_id(id_receta)
     if receta:
         es_autor = current_user.is_authenticated and current_user.nombre_usuario == receta.autor
-
-        return render_template('recetas/receta.html', receta=receta, es_autor=es_autor)
+        receta_guardada = current_user.is_authenticated and RecetaGuardada.esta_guardada(current_user.id_usuario, id_receta)
+        return render_template('recetas/receta.html', receta=receta, es_autor=es_autor, receta_guardada=receta_guardada)
     else:
-        return jsonify({'message': 'Receta no encontrada'}), 404
+        return redirect(url_for('not_found'))
 
 @app.route('/recetas/')
 def mostrar_recetas():
@@ -81,18 +82,16 @@ def eliminar_receta_por_id(id_receta):
     receta = Receta.mostrar_por_id(id_receta)
     if receta:
         receta.borrar()
-        return jsonify({'message': 'Receta eliminada correctamente'}), 200
     else:
-        return jsonify({'message': 'Receta no encontrada'}), 404
+        return redirect(url_for('not_found'))
     
 @app.route('/editar/<int:id_receta>', methods=['GET', 'POST'])
 def editar_receta(id_receta):
     receta = Receta.mostrar_por_id(id_receta)
     if not receta:
-        return jsonify({'message': 'Receta no encontrada'}), 404
+        return redirect(url_for('not_found'))
     if request.method == 'POST':
         receta.nombre_receta = request.form['nombre_receta']
-        receta.autor = request.form['autor']
         receta.descripcion = request.form['descripcion']
         receta.categoria = request.form['categoria']
         if 'ruta_imagen' in request.files:
@@ -100,7 +99,7 @@ def editar_receta(id_receta):
             if imagen.filename != '':
                 pass
         receta.guardar()
-        return redirect(url_for('get_receta', id_receta=id_receta))
+        return redirect(url_for('ver_receta', id_receta=id_receta))
     return render_template('editar-receta.html', receta=receta)
 
 @app.route('/api/recetas/<int:id_receta>', methods=['GET', 'PUT'])
@@ -108,7 +107,7 @@ def get_receta(id_receta):
     if request.method == 'PUT':
         receta = Receta.mostrar_por_id(id_receta)
         if not receta:
-            return jsonify({'message':'Receta no encontrada'}), 404
+            return redirect(url_for('not_found'))
         data = request.form
         receta.nombre_receta = data['nombre_receta']
         receta.autor = data['autor']
@@ -119,13 +118,12 @@ def get_receta(id_receta):
             if imagen.filename != '':
                 pass 
         receta.guardar()
-        return jsonify({'message':'Receta modificada correctamente'})
     else:
         receta = Receta.mostrar_por_id(id_receta)
         if receta:
             return jsonify(receta.serializar())
         else:
-            return jsonify({'message': 'Receta no encontrada'}), 404
+            return redirect(url_for('not_found'))
 
 @app.route('/registro', methods=['POST'])
 def crear_usuario():
@@ -137,18 +135,18 @@ def crear_usuario():
     confirmar = datos_usuario.get('confirm')
 
     if not nombre_usuario or not email or not password or not confirmar:
-        return jsonify({'mensaje': 'Faltan datos obligatorios'}), 400
+        flash('Todos los campos deben ser completados', 'warning')
     
     if password != confirmar:
-        return jsonify({'mensaje': 'La contraseña y la confirmación no coinciden'}), 400
+        flash('La contraseña y la confirmación no coinciden', 'warning')
 
     nuevo_usuario = Usuario(nombre_usuario=nombre_usuario, email=email, password=password)
 
     try:
         Usuario.guardar(nuevo_usuario)
-        return jsonify({'mensaje': 'Usuario creado correctamente', 'usuario': nuevo_usuario.serializar()}), 201
+        return redirect(url_for('index'))
     except Exception as e:
-        return jsonify({'mensaje': 'Error al crear usuario', 'error': str(e)}), 500
+        flash('Error al crear el usuario', 'error')
     
 @app.route('/ingresar', methods=['POST'])
 def ingresar_cuenta():
@@ -158,13 +156,12 @@ def ingresar_cuenta():
     password = datos_usuario.get('password')
 
     if not nombre_usuario or not password:
-        return jsonify({'mensaje': 'Nombre de usuario y contraseña son obligatorios'}), 400
+        flash('Debe ingresar nombre de usuario y contraseña', 'warning')
 
     usuario = Usuario.obtener_por_nombre_usuario(nombre_usuario)
     if usuario and bcrypt.check_password_hash(usuario['password'], password):
         user_instance = Usuario(id_usuario=usuario['id_usuario'], nombre_usuario=usuario['nombre_usuario'], email=usuario['email'], password=usuario['password'])
         login_user(user_instance)
-        flash('Inicio de sesión exitoso', 'success')
         return redirect(url_for('index'))
     else:
         flash('Nombre de usuario o contraseña incorrectos', 'danger')
@@ -174,7 +171,6 @@ def ingresar_cuenta():
 @login_required
 def logout():
     logout_user()
-    flash('Has cerrado sesión', 'info')
     return redirect(url_for('index'))
 
 @app.route('/')
@@ -205,6 +201,30 @@ def registro():
 @login_required
 def profile():
     recetas_usuario = Receta.mostrar_por_autor(current_user.nombre_usuario)
+    recetas_guardadas = RecetaGuardada.mostrar_por_usuario(current_user.id_usuario)
     return render_template('mi-perfil.html', recetas=recetas_usuario,
+                            recetas_guardadas=recetas_guardadas,  
                             nombre_usuario=current_user.nombre_usuario,
                             email=current_user.email)
+
+@app.route('/guardar_receta/<int:id_receta>', methods=['POST'])
+@login_required
+def guardar_receta(id_receta):
+    if RecetaGuardada.esta_guardada(current_user.id_usuario, id_receta):
+        RecetaGuardada.eliminar(current_user.id_usuario, id_receta)
+        return jsonify({'guardada': False})
+    else:
+        receta_guardada = RecetaGuardada(current_user.id_usuario, id_receta)
+        receta_guardada.guardar()
+        return jsonify({'guardada': True})
+
+@app.route('/receta_guardada/<int:id_receta>', methods=['GET'])
+@login_required
+def receta_guardada(id_receta):
+    return jsonify({
+        'guardada': RecetaGuardada.esta_guardada(current_user.id_usuario, id_receta)
+    })
+
+@app.route('/404/')
+def not_found():
+    return render_template('not-found.html')

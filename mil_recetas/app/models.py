@@ -149,3 +149,48 @@ class Usuario(UserMixin):
             'Nombre de usuario': self.nombre_usuario,
             'Email': self.email,
         }
+    
+class RecetaGuardada:
+    def __init__(self, id_usuario, id_receta):
+        self.id_usuario = id_usuario
+        self.id_receta = id_receta
+
+    def guardar(self):
+        db = get_db()
+        with db.cursor() as cursor:
+            cursor.execute(
+                "INSERT INTO recetas_guardadas (id_usuario, id_receta) VALUES (%s, %s)",
+                (self.id_usuario, self.id_receta)
+            )
+            db.commit()
+
+    @staticmethod
+    def mostrar_por_usuario(id_usuario):
+        db = get_db()
+        with db.cursor(dictionary=True) as cursor:
+            cursor.execute(
+                "SELECT r.* FROM recetas r JOIN recetas_guardadas rg ON r.id_receta = rg.id_receta WHERE rg.id_usuario = %s",
+                (id_usuario,)
+            )
+            resultados = cursor.fetchall()
+            return [Receta(**receta_dict) for receta_dict in resultados]
+
+    @staticmethod
+    def eliminar(id_usuario, id_receta):
+        db = get_db()
+        with db.cursor() as cursor:
+            cursor.execute(
+                "DELETE FROM recetas_guardadas WHERE id_usuario = %s AND id_receta = %s",
+                (id_usuario, id_receta)
+            )
+            db.commit()
+
+    @staticmethod
+    def esta_guardada(id_usuario, id_receta):
+        db = get_db()
+        with db.cursor(dictionary=True) as cursor:
+            cursor.execute(
+                "SELECT 1 FROM recetas_guardadas WHERE id_usuario = %s AND id_receta = %s",
+                (id_usuario, id_receta)
+            )
+            return cursor.fetchone() is not None

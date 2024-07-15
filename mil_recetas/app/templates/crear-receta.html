@@ -69,13 +69,18 @@
         <div class="login">
             <form method="POST" action="/crear-receta" enctype="multipart/form-data">
                 <h1>Crea tu receta</h1>
+    
                 <div class="form-group">
                     <label for="nombre_receta">Título:</label>
                     <input type="text" id="nombre_receta" name="nombre_receta" placeholder="Ingrese el título de la receta" required>
                 </div>
+    
                 <div class="form-group">
                     <label for="descripcion">Descripción:</label>
                     <textarea id="descripcion" name="descripcion" required></textarea>
+                </div>
+    
+                <div class="form-group">
                     <label for="categoria">Categoría:</label>
                     <select id="categoria" name="categoria" required>
                         <option value="" disabled>Seleccione una categoría</option>
@@ -84,10 +89,12 @@
                         <option value="horno">Recetas para horno</option>
                     </select>
                 </div>
+    
                 <div class="form-group file-upload">
                     <label for="ruta_imagen">Imagen:</label>
                     <input type="file" id="ruta_imagen" name="ruta_imagen" accept="image/*">
                 </div>
+    
                 <input type="submit" value="Crear Receta">
             </form>
         </div>
@@ -160,13 +167,15 @@
 
         .form-group {
             display: flex;
+            flex-direction: row;
             align-items: center;
             width: 100%;
             padding: 0.5rem 0;
         }
 
         .form-group label {
-            width: 30%;
+            width: auto;
+            margin-right: 1rem;
             text-align: right;
             padding-right: 1rem;
             font-weight: bold;
@@ -175,7 +184,8 @@
         .form-group input[type="text"],
         .form-group textarea,
         .form-group select {
-            width: 70%;
+            width: calc(100% - 100px);
+            flex-grow: 1;
             padding: 0.5rem;
             border-radius: 5px;
             border: 1px solid #ccc;

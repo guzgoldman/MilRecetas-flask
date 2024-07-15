@@ -6,9 +6,10 @@
     <link rel="shortcut icon" href="../static/img/favicon.ico" type="image/x-icon"> 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <script src="https://kit.fontawesome.com/d1ebd772a7.js" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="../../static/css/style.css">
-    <title>{{ receta.nombre_receta }} | MilRecetas</title>
+    <link rel="stylesheet" href="../static/css/style.css">
+    <title>404 | MilRecetas</title>
 </head>
+
 <body>
     <header>
         <div class="header-position">
@@ -62,44 +63,14 @@
         </div>
     </header>
 
-    <main class="container mt-4">
+    
+    <main class="container">
         <div class="row">
-            <div class="col-md-6 col-12">
-                <div class="pic-container">
-                    <img src="{{ url_for('static', filename='uploads/recetas/' + receta.ruta_imagen)}}" alt="">
-                </div>
-                <h2 class="text-center">{{ receta.nombre_receta }}</h2>
-                <p><strong>Subida por:</strong> {{ receta.autor }}</p>
-                <p><strong>Descripción:</strong> {{ receta.descripcion }}</p>
-            </div>
-    
-            <div class="col-md-6 col-12">
-                {% if current_user.is_authenticated %}
-                    <button id="guardar-receta" class="{% if receta_guardada %}guardada{% endif %} text-white" data-id="{{ receta.id_receta }}">
-                        {% if receta_guardada %}Guardada{% else %}Guardar Receta{% endif %}
-                    </button>
-                {% endif %}
-    
-                {% if es_autor %}
-                    <a href="{{ url_for('editar_receta', id_receta=receta.id_receta) }}" class="text-decoration-none">
-                        <button class="text-white">Editar Receta</button> 
-                    </a>
-                {% endif %}
-            </div>
+            <h1>404 - Not found</h1>
+            <h2>La receta buscada no existe</h2>
+            <a href="{{ url_for('index') }}">Volver al inicio</a>
         </div>
     </main>
-
-    <script>
-        document.getElementById('guardar-receta').addEventListener('click', function() {
-            const recetaId = this.dataset.id;
-            fetch(`/guardar_receta/${recetaId}`, { method: 'POST' })
-                .then(response => response.json())
-                .then(data => {
-                    this.classList.toggle('guardada', data.guardada);
-                    this.textContent = data.guardada ? 'Guardada' : 'Guardar Receta';
-                });
-        });
-    </script>
 
     <footer>
         <div class="footer-position">
@@ -139,20 +110,18 @@
     </footer>
 
     <style>
-        .pic-container {
-            border-radius: 30px;
-            border: 2px solid black;
+        main {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 0;
+            height: 59vh;
         }
-
-        .pic-container img {
-            border-radius: 30px;
-        }
-
-        button {
-            margin: 0.5rem 0;
-            height: 2.5rem;
-            width: 11rem;
+        main .row {
+            text-align: center;
         }
     </style>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
 </html>
