@@ -12,36 +12,36 @@
 
 <body>
     <header>
-        <div class="header-position">
-            <div class="col-lg-3 col-8">
+        <div class="header-position d-flex align-items-center justify-content-between flex-row">
+            <div class="col-lg-3 col-8 logo-container">
                 <div class="logo">
                     <a href="{{ url_for('index') }}"><img src="../static/img/logo.webp" alt=""></a>
                 </div>
             </div>
-            <nav class="col-lg-6">
+            <nav class="col-lg-6 d-flex justify-content-center">
                 <ul id="menu-list" class="nav">
-                    <li><a href="{{ url_for('mostrar_recetas') }}">Recetas</a></li>
-                    <li><a href="{{ url_for('index') }}#trending">Tendencias</a></li>
-                    <li><a href="{{ url_for('crear_receta') }}">Crear receta</a></li>
+                    <li><a class="text-decoration-none text-black fw-bold" href="{{ url_for('mostrar_recetas') }}">Recetas</a></li>
+                    <li><a class="text-decoration-none text-black fw-bold" href="{{ url_for('index') }}#trending">Tendencias</a></li>
+                    <li><a class="text-decoration-none text-black fw-bold" href="{{ url_for('crear_receta') }}">Crear receta</a></li>
                 </ul>
             </nav>
             <div id="user-large" class="col-lg-3">
                 {% if current_user.is_authenticated %}
                     <div class="user">
                         <i class="fa-regular fa-user"></i>
-                        <a href="{{ url_for('profile') }}">Mi perfil</a>
+                        <a class="fw-bold text-decoration-none fs-5 text-white" href="{{ url_for('profile') }}">Mi perfil</a>
                     </div>
                     <div class="user">
-                        <a href="{{ url_for('logout') }}">Cerrar sesión</a>
+                        <a class="fw-bold text-decoration-none fs-5 text-white" href="{{ url_for('logout') }}">Cerrar sesión</a>
                     </div>
                 {% else %}
                     <div class="user">
                         <i class="fa-regular fa-user"></i>
-                        <a href="{{ url_for('login') }}">Ingresa a tu cuenta</a>
+                        <a class="fw-bold text-decoration-none fs-5 text-white" href="{{ url_for('login') }}">Ingresá a tu cuenta</a>
                     </div>
                 {% endif %}
             </div>
-            <div class="navbar-button col-4 col-lg-4">
+            <div class="navbar-button col-4 col-lg-4 d-flex justify-content-end">
                 <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                     <i class="fa-solid fa-bars"></i>
@@ -54,34 +54,45 @@
             </div>
             <div class="offcanvas-body">
                 <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
-                    <li><a href="{{ url_for('mostrar_recetas') }}">Recetas</a></li>
-                    <li><a href="{{ url_for('index') }}#trending">Tendencias</a></li>
-                    <li><a href="{{ url_for('crear_receta') }}">Crear receta</a></li>
+                    <li><a class="text-black text-decoration-none fw-bold fs-4" href="{{ url_for('mostrar_recetas') }}">Recetas</a></li>
+                    <li><a class="text-black text-decoration-none fw-bold fs-4" href="{{ url_for('index') }}#trending">Tendencias</a></li>
+                    <li><a class="text-black text-decoration-none fw-bold fs-4" href="{{ url_for('crear_receta') }}">Crear receta</a></li>
                 </ul>
-                <div class="user"><a class="text-md-white" href="{{ url_for('login') }}">Ingresa a tu cuenta</a></div>
+                {% if current_user.is_authenticated %}
+                    <div class="user">
+                        <a class="fw-bold text-decoration-none fs-5 text-white" href="{{ url_for('profile') }}">Mi perfil</a>
+                    </div>
+                    <div class="user">
+                        <a class="fw-bold text-decoration-none fs-5 text-white" href="{{ url_for('logout') }}">Cerrar sesión</a>
+                    </div>
+                {% else %}
+                    <div class="user">
+                        <a class="fw-bold text-decoration-none fs-5 text-white" href="{{ url_for('login') }}">Ingresá a tu cuenta</a>
+                    </div>
+                {% endif %}
             </div>
         </div>
     </header>
 
     <main>
-        <div class="bar">
-            <div class="bar-img">
+        <div class="d-flex justify-content-center">
+            <div class="bar-img text-center">
                 <a href="#nosotros">
                 <img src="../static/img/nosotros.webp" alt="Nosotros logo" class="nosotros_logo">
                 </a>
-                <a class="title" href="#nosotros">Nosotros</a>
+                <a class="text-decoration-none text-black fw-bold fs-5" href="#nosotros">Nosotros</a>
             </div>
             <div class="bar-img">
                 <a href="#ubicacion">
                 <img src="../static/img/lugar.webp" alt="lugar logo" class="lugar_logo" >
                 </a>
-                <a class="title" href="#ubicacion">Ubicación</a>
+                <a class="text-decoration-none text-black fw-bold fs-5" href="#ubicacion">Ubicación</a>
             </div>
         </div>
         <hr>
         <section class="container">
-            <h1 class="title_nos" id="nosotros">Nosotros</h1>
-            <div class="info-row">
+            <h1 class="title_nos text-center" id="nosotros">Nosotros</h1>
+            <div class="d-flex align-items-center flex-md-row flex-column mb-5">
                 <div class="text-block col-12 col-lg-6">
                     <p>Desde hace tiempo, en Mil Recetas nos hemos dedicado con pasión a compartir una amplia variedad de recetas que inspiran y deleitan a todos los amantes de la cocina. Nos enorgullece ofrecer un amplio abanico de opciones, desde sabrosas recetas vegetarianas hasta deliciosos postres que endulzan el paladar.</p>
                 </div>
@@ -90,7 +101,7 @@
                 </div>
             </div>
 
-            <div class="info-reverse-row">
+            <div class="d-flex flex-md-row-reverse flex-column align-items-center mb-5">
                 <div class="text-block col-12 col-lg-6">
                     <p>
                         Nuestra misión es simple: hacer que cocinar sea una experiencia emocionante y gratificante para todos. Ya sea que estés buscando preparar una comida reconfortante para tu familia o sorprender a tus invitados con un plato innovador, en Mil Recetas encontrarás la inspiración que necesitas.
@@ -101,7 +112,7 @@
                 </div>
             </div>
 
-            <div class="info-row">
+            <div class="d-flex align-items-center flex-md-row flex-column mb-5">
                 <div class="text-block col-12 col-lg-6">
                     <p>
                         Además de las recetas, en Mil Recetas también encontrarás consejos útiles, trucos culinarios y recomendaciones de ingredientes para ayudarte a mejorar tus habilidades en la cocina y alcanzar resultados extraordinarios.
@@ -112,7 +123,7 @@
                 </div>
             </div>
 
-            <div class="info-reverse-row">
+            <div class="d-flex flex-md-row-reverse flex-column align-items-center mb-5">
                 <div class="text-block col-12 col-lg-6">
                     <p>
                         Nos sentimos honrados de ser parte de tu viaje culinario y esperamos inspirarte a explorar nuevas recetas, experimentar con ingredientes frescos y, sobre todo, disfrutar del placer de cocinar y compartir una comida deliciosa con tus seres queridos.
@@ -123,7 +134,7 @@
                 </div>
             </div>
             
-            <div class="info-row">
+            <div class="d-flex align-items-center flex-md-row flex-column mb-5">
                 <div class="text-block col-12 col-lg-6">
                     <p>
                         Gracias por elegir Mil Recetas. ¡Juntos, hagamos que cada comida sea una experiencia inolvidable!
@@ -136,47 +147,60 @@
         </section>
         <hr>
         <section class="container">
-            <h1 class="title_ubi" id="ubicacion">Ubicación</h1>
-            <div class="container map-container">
-                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d210147.47496040538!2d-58.59811041493593!3d-34.615430352200306!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x95bcca3b4ef90cbd%3A0xa0b3812e88e88e87!2sBuenos%20Aires%2C%20Cdad.%20Aut%C3%B3noma%20de%20Buenos%20Aires!5e0!3m2!1ses-419!2sar!4v1714352874744!5m2!1ses-419!2sar"  class="map" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            <h1 class="title_ubi text-center" id="ubicacion">Ubicación</h1>
+            <div class="container d-flex justify-content-center">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d210147.47496040538!2d-58.59811041493593!3d-34.615430352200306!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x95bcca3b4ef90cbd%3A0xa0b3812e88e88e87!2sBuenos%20Aires%2C%20Cdad.%20Aut%C3%B3noma%20de%20Buenos%20Aires!5e0!3m2!1ses-419!2sar!4v1714352874744!5m2!1ses-419!2sar"  class="map d-flex justify-content-center" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
             </div>
         </section>
     </main>
 
     <footer>
-        <div class="footer-position">
-            <div class="footer-section col-12 col-md-4">
-                <h2>Contacto</h2>
-                <ul class="contacto">
-                    <li>
-                        <i class="fa-brands fa-whatsapp fs-2 icon"></i>
-                        <a href="#">WhatsApp</a>
-                    </li>
-                    <li>
-                        <img src="../static/img/redes_sociales.webp" alt="Icono RRSS" class="icon">
-                        <a href="#">Redes sociales</a>
-                    </li>
-                </ul>
+        <div class="footer container-fluid">
+            <div class="footerCenter row px-5 pt-3 text-white">
+                <div class="footer-div col-xl col-md-12 col-sm-12 col-xl-3 col-lg-12 mb-4 mb-lg-4">
+                    <p>
+                        <img class="logo" src="../static/img/logo.webp">
+                    </p>
+                </div>
+                <div class="footer-div col-xl col-md-4 col-sm-12 col-xl-3 col-lg-4 mb-4 mb-lg-0">
+                    <p class="mb-2 text-style">
+                        Conocenos
+                    </p>
+                    <p class="p-footer">
+                        <a class="text-decoration-none text-white" href="{{ url_for('nosotros') }}">Nosotros</a>
+                    </p>
+                    <p class="p-footer">
+                        <a class="text-decoration-none text-white" href="{{ url_for('faq') }}">Preguntas frecuentes</a>
+                    </p>
+                </div>
+                <div class="footer-div col-xl col-md-4 col-sm-12 col-xl-3 col-lg-4 mb-4 mb-lg-0">
+                    <p class="mb-2 text-style">
+                        Ayuda
+                    </p>
+                    <p class="p-footer">
+                        <a class="text-decoration-none text-white" href="{{ url_for('contacto') }}">Contactanos</a>
+                    </p>
+                    <p class="p-footer">
+                        <a class="text-decoration-none text-white" href="mailto:atencion@milrecetas.com">atencion@milrecetas.com</a>
+                    </p>
+                </div>
+                <div class="footer-div col-xl col-md-4 col-sm-12 col-xl-3 col-lg-4 mb-4 mb-lg-0">
+                    <p class="mb-2 text-style">
+                        Seguinos en nuestra redes sociales
+                    </p>
+                    <p class="p-footer">
+                        <a class="text-decoration-none text-white" href="https://www.instagram.com">Instagram</a>
+                    </p>
+                    <p class="p-footer">
+                        <a class="text-decoration-none text-white" href="https://www.facebook.com">Facebook</a>
+                    </p>
+                </div>
+                <div class="col-xs-12">
+                    <p class="text-center mt-3 text-style">
+                        Copyright &copy; 2024 | Héctor Guzmán
+                    </p>
+                </div>
             </div>
-            <div class="footer-section col-12 col-md-4">
-                <h2>Categorías</h2>
-                <ul>
-                    <li><a href="{{ url_for('index') }}#veggie">Veggie</a></li>
-                    <li><a href="{{ url_for('index') }}#trending">Tendencias</a></li>
-                    <li><a href="{{ url_for('index') }}#postres">Postres</a></li>
-                </ul>
-            </div>
-            <div class="footer-section col-12 col-md-4">
-                <h2>Conocenos</h2>
-                <ul>
-                    <li><a href="{{ url_for('contacto') }}">Contáctanos</a></li>
-                    <li><a href="{{ url_for('nosotros') }}">Nosotros</a></li>
-                    <li><a href="{{ url_for('faq') }}">Preguntas Frecuentes</a></li>
-                </ul>
-            </div>
-        </div>
-        <div class="copyright">
-            <p>Copyright &copy; 2024 - Grupo 4 Codo a Codo (Full Stack Python)</p>
         </div>
     </footer>
     
