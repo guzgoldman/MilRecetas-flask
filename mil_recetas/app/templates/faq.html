@@ -1,172 +1,58 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" href="../static/img/favicon.ico" type="image/x-icon">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <script src="https://kit.fontawesome.com/d1ebd772a7.js" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="../static/css/style.css">
-    <title>Inicia sesión | Mil Recetas</title>
-</head>
+{% extends "layout.html" %}
 
-<body>
-    <header>
-        <div class="header-position d-flex align-items-center justify-content-between flex-row">
-            <div class="col-lg-3 col-8 logo-container">
-                <div class="logo">
-                    <a href="{{ url_for('index') }}"><img src="../static/img/logo.webp" alt=""></a>
-                </div>
-            </div>
-            <nav class="col-lg-6 d-flex justify-content-center">
-                <ul id="menu-list" class="nav">
-                    <li><a class="text-decoration-none text-black fw-bold" href="{{ url_for('mostrar_recetas') }}">Recetas</a></li>
-                    <li><a class="text-decoration-none text-black fw-bold" href="{{ url_for('index') }}#trending">Tendencias</a></li>
-                    <li><a class="text-decoration-none text-black fw-bold" href="{{ url_for('crear_receta') }}">Crear receta</a></li>
-                </ul>
-            </nav>
-            <div id="user-large" class="col-lg-3">
-                {% if current_user.is_authenticated %}
-                    <div class="user">
-                        <i class="fa-regular fa-user"></i>
-                        <a class="fw-bold text-decoration-none fs-5 text-white" href="{{ url_for('profile') }}">Mi perfil</a>
-                    </div>
-                    <div class="user">
-                        <a class="fw-bold text-decoration-none fs-5 text-white" href="{{ url_for('logout') }}">Cerrar sesión</a>
-                    </div>
-                {% else %}
-                    <div class="user">
-                        <i class="fa-regular fa-user"></i>
-                        <a class="fw-bold text-decoration-none fs-5 text-white" href="{{ url_for('login') }}">Ingresá a tu cuenta</a>
-                    </div>
-                {% endif %}
-            </div>
-            <div class="navbar-button col-4 col-lg-4 d-flex justify-content-end">
-                <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                    <i class="fa-solid fa-bars"></i>
-                </button>
-            </div>
+{% block content %}
+    <div class="container">
+        <h1 class="pages-title fw-bold text-center my-4" id="preguntas-frecuentes">Preguntas frecuentes</h1>
+        <div class="container-forma">
+            <p class="pregunta">¿Cómo registrarme?</p>
+            <p class="respuesta">Sigue estos pasos para registrarte:</p>
+            <ol>
+                <li>Haz clic en <a class="fw-bold text-black text-decoration-none" href="{{ url_for('registro') }}">Registro</a> en la parte superior derecha de la página.</li>
+                <li>Completa el formulario con un nombre de usuario, tu email y una contraseña segura</li>
+                <li>Haz clic en "Crear cuenta" para finalizar el proceso de registro</li>
+                <li>Recibirás un correo electrónico de confirmación, sigue las instrucciones en el correo para verificar tu cuenta</li>
+                <li>Una vez que hayas verificado tu cuenta, podrás ingresar a tu cuenta desde <a class="fw-bold text-black text-decoration-none" href="{{ url_for('login') }}">Ingresa</a></li>
+            </ol>
         </div>
-        <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar">
-            <div class="offcanvas-header">
-                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-            </div>
-            <div class="offcanvas-body">
-                <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
-                    <li><a class="text-black text-decoration-none fw-bold fs-4" href="{{ url_for('mostrar_recetas') }}">Recetas</a></li>
-                    <li><a class="text-black text-decoration-none fw-bold fs-4" href="{{ url_for('index') }}#trending">Tendencias</a></li>
-                    <li><a class="text-black text-decoration-none fw-bold fs-4" href="{{ url_for('crear_receta') }}">Crear receta</a></li>
-                </ul>
-                {% if current_user.is_authenticated %}
-                    <div class="user">
-                        <a class="fw-bold text-decoration-none fs-5 text-white" href="{{ url_for('profile') }}">Mi perfil</a>
-                    </div>
-                    <div class="user">
-                        <a class="fw-bold text-decoration-none fs-5 text-white" href="{{ url_for('logout') }}">Cerrar sesión</a>
-                    </div>
-                {% else %}
-                    <div class="user">
-                        <a class="fw-bold text-decoration-none fs-5 text-white" href="{{ url_for('login') }}">Ingresá a tu cuenta</a>
-                    </div>
-                {% endif %}
-            </div>
+        <div class="container-forma">
+            <p class="pregunta">¿Cómo recuperar mi contraseña?</p>
+            <p class="respuesta">Si olvidaste tu contraseña, sigue estos pasos para recuperarla</p>
+            <ol>
+                <li>Haz clic en <a class="fw-bold text-black text-decoration-none" href="{{ url_for('login') }}">Ingresa</a> en la parte superior derecha de la pagina</li>
+                <li>Haz clic en "¿Olvidaste tu contraseña?"</li>
+                <li>Ingresa tu email y haz clic en "Recuperar contraseña"</li>
+                <li>Recibiras un correo electrónico con un enlace para reestablecer tu contraseña. Haz clic en el enlace y sigue las instrucciones para crear una nueva contraseña</li>
+            </ol>
         </div>
-    </header>
+        <div class="container-forma">
+            <p class="pregunta">¿Cómo buscar una receta? </p>
+            <p class="respuesta">Puedes utilizar la barra de busqueda en la parte superior de la <a class="text-decoration-none text-black fw-bold" href="{{ url_for('index') }}">página de inicio</a> para encontrar recetas por nombre, ingredientes o categorías.</p>
+        </div>
+        <div class="container-forma">
+            <p class="pregunta">¿Cómo guardar una receta?</p>
+            <p class="respuesta">Para guardar tus recetas favoritas, crea una cuenta o inicia sesión, ingresa a la receta y haz click en en el botón "Guardar receta"</p>
+        </div>
+        <div class="container-forma">
+            <p class="pregunta">¿Cómo comentar una receta?</p>
+            <p>Para comentar una receta, crea una cuenta o inicia sesión, ingresa a la receta y dirígete a la sección "Comentarios"</p>
+        </div>
+        <div class="container-forma">
+            <p class="pregunta">¿Cómo reportar errores o sugerir cambios?</p>
+            <p class="respuesta">Reportar errores o sugerir cambios o mejoras es fundamental para el progreso del sítio. Dirigete al <a class="text-decoration-none text-black fw-bold" href="{{ url_for('contacto') }}">formulario de contacto</a> o contáctanos por email a <a class="text-decoration-none text-black fw-bold" href="mailto:soporte@milrecetas.com">soporte@milrecetas.com</a></p>
+        </div>
+    </div>
+{% endblock %}
 
-    <main>
-        <div class="container">
-            <h1 class="pages-title text-center my-4" id="preguntas-frecuentes">Preguntas Frecuentes</h1>
-            <div class="container-forma">
-                <h2 class="pregunta">¿Cómo puedes registrarte?</h2>
-                <p class="respuesta">Sigue estos pasos para registrarte:</p>
-                <ol>
-                    <li>Haz clic en "Ingresa a tu cuenta" en la parte superior derecha de la página. Al final del formulario haz clic en en la opción de registro</li>
-                    <li>Completa el formulario con un nombre de usuario, tu direccion de correo electrónico y una contraseña segura</li>
-                    <li>Haz clic en "Crear una cuenta" para finalizar el proceso de registro</li>
-                    <li>Recibirás un correo electrónico de confirmación, sigue las instrucciones en el correo para verificar tu cuenta</li>
-                    <li>Una vez que hayas verificado tu cuenta, ya podrás ingresar a tu cuenta desde "Ingresa a tu cuenta"</li>
-                </ol>
-            </div>
-            <div class="container-forma">
-                <h2 class="pregunta">¿Cómo puedo recuperar mi contraseña?</h2>
-                <p class="respuesta">Si olvidaste su contraseña, sigue estos pasos para recuperarla</p>
-                <ol>
-                    <li>Haz clic en "Ingresa a tu cuenta" en la parte superior derecha de la pagina</li>
-                    <li>Haz clic en "¿Olvidaste tu contraseña?</li>
-                    <li>Ingresa tu dirección de correo electrónico y haz clic en "Recuperar contraseña"</li>
-                    <li>Recibiras un correo electrónico con un enlace para reestablecer tu contraseña. Haz clic en el enlace y sigue las instrucciones para crear una nueva contraseña</li>
-                </ol>
-            </div>
-            <div class="container-forma">
-                <h2 class="pregunta">¿Cómo puedo buscar una receta? </h2>
-                <p class="respuesta">Puedes utilizar la barra de busqueda en la parte superior de la <a href="../index.html">página de inicio</a> para encontrar recetas por nombre, ingredientes o categorías.</p>
-            </div>
-            <div class="container-forma">
-                <h2 class="pregunta">¿Cómo puedo guardar una receta?</h2>
-                <p class="respuesta">Para guardar tus recetas favoritas, crea una cuenta e inicia sesión, luego haz clic en el icono de "guardar" en la receta que desees</p>
-            </div>
-            <div class="container-forma">
-                <h2 class="pregunta">¿Cómo puedo dejar comentarios en las recetas?</h2>
-                <p>Para dejar comentarios en una receta, crea una cuenta e inicia sesión. Luego desplazate hasta la sección de comentarios al final de la receta </p>
-            </div>
-            <div class="container-forma">
-                <h2 class="pregunta">¿Cómo puedo contactarme con soporte?</h2>
-                <p class="respuesta">Puedes contactarnos a traves de nuestro <a href="./contacto.html">formulario de contacto</a>, por correo electronico a <a href="mailto:soporte@milrecetas.com">soporte@milrecetas.com</a> o a nuestro Whastapp al +1 555-5555. </p>
-            </div>
-        </div>
-    </main>
+{% block style %}
+    <style>
+        .container-forma {
+            width: 85%;
+        }
 
-    <footer>
-        <div class="footer container-fluid">
-            <div class="footerCenter row px-5 pt-3 text-white">
-                <div class="footer-div col-xl col-md-12 col-sm-12 col-xl-3 col-lg-12 mb-4 mb-lg-4">
-                    <p>
-                        <img class="logo" src="../static/img/logo.webp">
-                    </p>
-                </div>
-                <div class="footer-div col-xl col-md-4 col-sm-12 col-xl-3 col-lg-4 mb-4 mb-lg-0">
-                    <p class="mb-2 text-style">
-                        Conocenos
-                    </p>
-                    <p class="p-footer">
-                        <a class="text-decoration-none text-white" href="{{ url_for('nosotros') }}">Nosotros</a>
-                    </p>
-                    <p class="p-footer">
-                        <a class="text-decoration-none text-white" href="{{ url_for('faq') }}">Preguntas frecuentes</a>
-                    </p>
-                </div>
-                <div class="footer-div col-xl col-md-4 col-sm-12 col-xl-3 col-lg-4 mb-4 mb-lg-0">
-                    <p class="mb-2 text-style">
-                        Ayuda
-                    </p>
-                    <p class="p-footer">
-                        <a class="text-decoration-none text-white" href="{{ url_for('contacto') }}">Contactanos</a>
-                    </p>
-                    <p class="p-footer">
-                        <a class="text-decoration-none text-white" href="mailto:atencion@milrecetas.com">atencion@milrecetas.com</a>
-                    </p>
-                </div>
-                <div class="footer-div col-xl col-md-4 col-sm-12 col-xl-3 col-lg-4 mb-4 mb-lg-0">
-                    <p class="mb-2 text-style">
-                        Seguinos en nuestra redes sociales
-                    </p>
-                    <p class="p-footer">
-                        <a class="text-decoration-none text-white" href="https://www.instagram.com">Instagram</a>
-                    </p>
-                    <p class="p-footer">
-                        <a class="text-decoration-none text-white" href="https://www.facebook.com">Facebook</a>
-                    </p>
-                </div>
-                <div class="col-xs-12">
-                    <p class="text-center mt-3 text-style">
-                        Copyright &copy; 2024 | Héctor Guzmán
-                    </p>
-                </div>
-            </div>
-        </div>
-    </footer>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-</body>
-</html>
+        @media (max-width: 991px) {
+            .container-forma {
+                width: 95%;
+            }
+        }
+    </style>
+{% endblock %}

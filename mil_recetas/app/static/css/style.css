@@ -77,6 +77,10 @@ nav ul li a{
     transition: all .5s;
 }
 
+nav a {
+    color: black;
+}
+
 nav a:hover{
     color: white;
     background-color: #008ecc;
@@ -109,8 +113,8 @@ main {
 
 .buscador {
     border: 2px solid black;
-    height: 7rem;
-    border-radius: 40px;
+    height: 4rem;
+    border-radius: 15px;
     width: 512px;
 }
 
@@ -140,7 +144,7 @@ main {
 }
 
 .section-content {
-    margin: 1rem 3rem 0 3rem;
+    margin: 0 3rem;
 }
 
 .section-title span {
@@ -399,6 +403,11 @@ button {
 
 .container-forma ol {
     padding-left: 2rem;
+}
+
+.pregunta {
+    font-weight: bold;
+    font-size: 1.5rem;
 }
 /* FIN FAQ*/
 

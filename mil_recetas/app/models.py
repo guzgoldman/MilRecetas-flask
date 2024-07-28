@@ -1,7 +1,6 @@
 from app import get_db
 from config import bcrypt
 from flask_login import UserMixin
-import mysql.connector
 
 class Receta:
     def __init__(self, nombre_receta, descripcion, categoria, ruta_imagen, autor=None, id_receta=None):
@@ -32,13 +31,21 @@ class Receta:
             db.commit()
 
     @staticmethod
-    def mostrar_todas():
+    def mostrar_todas(offset=0, limit=10):
         db = get_db()
         with db.cursor(dictionary=True) as cursor:
-            cursor.execute("SELECT id_receta, nombre_receta, autor, descripcion, categoria, ruta_imagen FROM recetas")
+            cursor.execute("SELECT id_receta, nombre_receta, autor, descripcion, categoria, ruta_imagen FROM recetas LIMIT %s OFFSET %s", (limit, offset))
             resultados = cursor.fetchall()
             return resultados
     
+    @staticmethod
+    def contar_todas():
+        db = get_db()
+        with db.cursor(dictionary=True) as cursor:
+            cursor.execute("SELECT COUNT(*) AS total FROM recetas")
+            result = cursor.fetchone()
+            return result['total']
+
     @staticmethod
     def mostrar_por_id(id_receta):
         with get_db().cursor(dictionary=True) as cursor:

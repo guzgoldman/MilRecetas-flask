@@ -1,180 +1,107 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" href="../static/img/favicon.ico" type="image/x-icon"> 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <script src="https://kit.fontawesome.com/d1ebd772a7.js" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="../static/css/style.css">
-    <title>Mi perfil | MilRecetas</title>
-</head>
-<body>
-    <header>
-        <div class="header-position d-flex align-items-center justify-content-between flex-row">
-            <div class="col-lg-3 col-8 logo-container">
-                <div class="logo">
-                    <a href="{{ url_for('index') }}"><img src="../static/img/logo.webp" alt=""></a>
-                </div>
-            </div>
-            <nav class="col-lg-6 d-flex justify-content-center">
-                <ul id="menu-list" class="nav">
-                    <li><a class="text-decoration-none text-black fw-bold" href="{{ url_for('mostrar_recetas') }}">Recetas</a></li>
-                    <li><a class="text-decoration-none text-black fw-bold" href="{{ url_for('index') }}#trending">Tendencias</a></li>
-                    <li><a class="text-decoration-none text-black fw-bold" href="{{ url_for('crear_receta') }}">Crear receta</a></li>
-                </ul>
-            </nav>
-            <div id="user-large" class="col-lg-3">
-                {% if current_user.is_authenticated %}
-                    <div class="user">
-                        <i class="fa-regular fa-user"></i>
-                        <a class="fw-bold text-decoration-none fs-5 text-white" href="{{ url_for('profile') }}">Mi perfil</a>
-                    </div>
-                    <div class="user">
-                        <a class="fw-bold text-decoration-none fs-5 text-white" href="{{ url_for('logout') }}">Cerrar sesión</a>
-                    </div>
-                {% else %}
-                    <div class="user">
-                        <i class="fa-regular fa-user"></i>
-                        <a class="fw-bold text-decoration-none fs-5 text-white" href="{{ url_for('login') }}">Ingresá a tu cuenta</a>
-                    </div>
-                {% endif %}
-            </div>
-            <div class="navbar-button col-4 col-lg-4 d-flex justify-content-end">
-                <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                    <i class="fa-solid fa-bars"></i>
-                </button>
-            </div>
-        </div>
-        <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar">
-            <div class="offcanvas-header">
-                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-            </div>
-            <div class="offcanvas-body">
-                <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
-                    <li><a class="text-black text-decoration-none fw-bold fs-4" href="{{ url_for('mostrar_recetas') }}">Recetas</a></li>
-                    <li><a class="text-black text-decoration-none fw-bold fs-4" href="{{ url_for('index') }}#trending">Tendencias</a></li>
-                    <li><a class="text-black text-decoration-none fw-bold fs-4" href="{{ url_for('crear_receta') }}">Crear receta</a></li>
-                </ul>
-                {% if current_user.is_authenticated %}
-                    <div class="user">
-                        <a class="fw-bold text-decoration-none fs-5 text-white" href="{{ url_for('profile') }}">Mi perfil</a>
-                    </div>
-                    <div class="user">
-                        <a class="fw-bold text-decoration-none fs-5 text-white" href="{{ url_for('logout') }}">Cerrar sesión</a>
-                    </div>
-                {% else %}
-                    <div class="user">
-                        <a class="fw-bold text-decoration-none fs-5 text-white" href="{{ url_for('login') }}">Ingresá a tu cuenta</a>
-                    </div>
-                {% endif %}
-            </div>
-        </div>
-    </header>
+{% extends "layout.html" %}
 
-    <main class="container">
-        <div class="row">
-            <div class="col-lg-4 col-md-12 mb-4">
-                <h2 class="text-center">Mi Perfil</h2>
+{% block main_class %}container-fluid{% endblock %}
 
+{% block content %}
+    <div class="row full-height">
+        <div class="col-lg-3 col-md-12 mb-4 d-flex flex-column align-items-center">
+            <div class="column d-flex align-items-center flex-column">
+                <p class="text-center fw-bold fs-5">Datos de la cuenta</p>
                 <p class="text-center"><strong>Nombre de usuario:</strong> {{ nombre_usuario }}</p>
                 <p class="text-center"><strong>Email:</strong> {{ email }}</p>
+                <br>
+                <a href="#" class="boton-cambiar text-center">Cambiar contraseña</a>
+                <a href="#" class="boton-eliminar text-center">Eliminar cuenta</a>
             </div>
+        </div>
 
-            <div class="col-lg-4 col-md-12 mb-4">
-                <h2 class="text-center">Mis Recetas</h2>
-                <ul class="recipe">
-                    {% for receta in recetas %}
-                    <li>
-                        <div class="recipe-description">
-                            <p class="recipe-title">{{ receta.nombre_receta }}</p>
-                            <p class="price correct">
-                                <a href="{{ url_for('ver_receta', id_receta=receta.id_receta) }}">Ver receta</a>
-                            </p>
-                            <p class="price">
-                                <a class="boton-eliminar" href="{{ url_for('eliminar_receta', id_receta=receta.id_receta) }}">Eliminar</a>
-                            </p>
-                        </div>
-                    </li>
-                    {% endfor %}
-                </ul>
-            </div>
-            
-
-            <div class="col-lg-4 col-md-12 mb-4">
-                <h2 class="text-center">Mis recetas guardadas</h2>
-                <ul class="recipe">
-                    {% if recetas_guardadas %}
-                        {% for receta_guardada in recetas_guardadas %}
-                            <li>
-                                <a href="{{ url_for('ver_receta', id_receta=receta_guardada.id_receta) }}">
-                                    <div class="recipe-description">
-                                        <p class="recipe-title">{{ receta_guardada.nombre_receta }}</p>
-                                        <p class="price">Ver receta</p>
-                                    </div>
-                                </a>
+        <div class="col-lg-9 col-md-12 d-flex flex-column">
+            <div class="column half-height row">
+                <p class="text-center fw-bold fs-3">Tus recetas</p>
+                <div class="recipe-container">
+                    <ul class="recipe d-flex flex-wrap justify-content-center align-items-center">
+                        {% if recetas %}
+                            {% for receta in recetas %}
+                            <li class="col-12 col-md-6 col-lg-4 col-xl-3">
+                                <div class="recipe-description">
+                                    <p class="recipe-title">{{ receta.nombre_receta }}</p>
+                                    <p class="price correct">
+                                        <a href="{{ url_for('ver_receta', id_receta=receta.id_receta) }}">Ver receta</a>
+                                    </p>
+                                    <p class="price">
+                                        <a class="boton-eliminar" href="{{ url_for('eliminar_receta', id_receta=receta.id_receta) }}">Eliminar</a>
+                                    </p>
+                                </div>
                             </li>
-                        {% endfor %}
-                    {% else %}
-                            <p>No tienes recetas guardadas</p>
-                    {% endif %}
-                </ul>
+                            {% endfor %}
+                        {% else %}
+                            <p class="text-center">No tienes recetas creadas <br> <a href="{{ url_for('crear_receta') }}">Ingresa aquí para crear una</a></p>
+                        {% endif %}
+                    </ul>
+                </div>
             </div>
-        </div>
-    </main>
-
-    <footer>
-        <div class="footer container-fluid">
-            <div class="footerCenter row px-5 pt-3 text-white">
-                <div class="footer-div col-xl col-md-12 col-sm-12 col-xl-3 col-lg-12 mb-4 mb-lg-4">
-                    <p>
-                        <img class="logo" src="../static/img/logo.webp">
-                    </p>
-                </div>
-                <div class="footer-div col-xl col-md-4 col-sm-12 col-xl-3 col-lg-4 mb-4 mb-lg-0">
-                    <p class="mb-2 text-style">
-                        Conocenos
-                    </p>
-                    <p class="p-footer">
-                        <a class="text-decoration-none text-white" href="{{ url_for('nosotros') }}">Nosotros</a>
-                    </p>
-                    <p class="p-footer">
-                        <a class="text-decoration-none text-white" href="{{ url_for('faq') }}">Preguntas frecuentes</a>
-                    </p>
-                </div>
-                <div class="footer-div col-xl col-md-4 col-sm-12 col-xl-3 col-lg-4 mb-4 mb-lg-0">
-                    <p class="mb-2 text-style">
-                        Ayuda
-                    </p>
-                    <p class="p-footer">
-                        <a class="text-decoration-none text-white" href="{{ url_for('contacto') }}">Contactanos</a>
-                    </p>
-                    <p class="p-footer">
-                        <a class="text-decoration-none text-white" href="mailto:atencion@milrecetas.com">atencion@milrecetas.com</a>
-                    </p>
-                </div>
-                <div class="footer-div col-xl col-md-4 col-sm-12 col-xl-3 col-lg-4 mb-4 mb-lg-0">
-                    <p class="mb-2 text-style">
-                        Seguinos en nuestra redes sociales
-                    </p>
-                    <p class="p-footer">
-                        <a class="text-decoration-none text-white" href="https://www.instagram.com">Instagram</a>
-                    </p>
-                    <p class="p-footer">
-                        <a class="text-decoration-none text-white" href="https://www.facebook.com">Facebook</a>
-                    </p>
-                </div>
-                <div class="col-xs-12">
-                    <p class="text-center mt-3 text-style">
-                        Copyright &copy; 2024 | Héctor Guzmán
-                    </p>
+            <div class="column half-height row">
+                <p class="text-center fw-bold fs-3">Recetas guardadas</p>
+                <div class="recipe-container">
+                    <ul class="recipe d-flex flex-wrap justify-content-center align-items-center">
+                        {% if recetas_guardadas %}
+                            {% for receta_guardada in recetas_guardadas %}
+                                <li class="col-12 col-md-6 col-lg-4 col-xl-3">
+                                    <a href="{{ url_for('ver_receta', id_receta=receta_guardada.id_receta) }}">
+                                        <div class="recipe-description">
+                                            <p class="recipe-title">{{ receta_guardada.nombre_receta }}</p>
+                                            <p class="price">Ver receta</p>
+                                        </div>
+                                    </a>
+                                </li>
+                            {% endfor %}
+                        {% else %}
+                                <p class="text-center">No tienes recetas guardadas <br> <a href="{{ url_for('mostrar_recetas') }}">Ingresa aquí para ver todas las recetas</a></p>
+                        {% endif %}
+                    </ul>
                 </div>
             </div>
         </div>
-    </footer>
+    </div>
+{% endblock %}
 
+{% block style %}
     <style>
+        .column {
+            background-color: #fff;
+            padding: 20px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            height: auto;
+        }
+
+        .full-height {
+            height: calc(100% - 2rem); /* Altura de la ventana menos márgenes */
+        }
+
+        .half-height {
+            height: auto; /* Mitad de la altura del contenedor padre */
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            margin: 0;
+        }
+
+        main {
+            flex: 1;
+            margin: 1rem 0;
+        }
+
+        @media (max-width: 768px) {
+            main {
+                margin-top: 6rem;
+            }
+        }
+
         .recipe-description .correct a {
             border: 0px;
             color: white;
@@ -201,6 +128,14 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .recipe-item {
+            flex: 1 1 100%; /* Ocupa el 100% del ancho en pantallas pequeñas */
+            max-width: calc(100% - 15px); /* Ajusta el ancho máximo en función del espacio disponible */
         }
 
         .recipe-description a {
@@ -211,18 +146,55 @@
             background-color: #dc3545;
             color: white;
             padding: 8px 15px;
-            border: none;
-            border-radius: 5px;
+            border: 2px solid var(--color-primario);
+            border-radius: 15px;
+            text-decoration: none;
+            width: 85%;
+            font-weight: bold;
+        }
+
+        .boton-cambiar {
+            background-color: cadetblue;
+            color: white;
+            padding: 8px 15px;
+            border: 2px solid lightblue;
+            border-radius: 15px;
+            text-decoration: none;
+            width: 85%;
+            font-weight: bold;
         }
 
         .recipe {
             list-style: none;
             padding: 0;
+            gap: 15px;
         }
 
         .recipe li {
             margin-bottom: 15px;
         }
+
+        .recipe-container {
+            overflow-x: auto;
+            padding: 0 15px;
+        }
+
+        @media (min-width: 576px) {
+            .recipe-item {
+                flex: 1 1 calc(50% - 15px); /* Ocupa la mitad del ancho en pantallas pequeñas */
+            }
+        }
+
+        @media (min-width: 768px) {
+            .recipe-item {
+                flex: 1 1 calc(33.333% - 15px); /* Ocupa un tercio del ancho en pantallas medianas */
+            }
+        }
+
+        @media (min-width: 992px) {
+            .recipe-item {
+                flex: 1 1 calc(25% - 15px); /* Ocupa un cuarto del ancho en pantallas grandes */
+            }
+        }
     </style>
-</body>
-</html>
+{% endblock %}

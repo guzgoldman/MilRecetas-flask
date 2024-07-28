@@ -12,7 +12,6 @@ app.config['SECRET_KEY'] = 'bebebeto11141923'
 login_manager = LoginManager()
 login_manager.init_app(app)
 
-
 DATABASE_CONFIG = {
     'user': os.getenv('DB_USERNAME'),
     'password': os.getenv('DB_PASSWORD'),

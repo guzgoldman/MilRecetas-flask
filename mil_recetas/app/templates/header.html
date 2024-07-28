@@ -1,0 +1,75 @@
+<header>
+    <div class="header-position d-flex align-items-center justify-content-between flex-row">
+        <div class="col-lg-3 col-8 logo-container">
+            <div class="logo">
+                <a href="{{ url_for('index') }}"><img src="../static/img/logo.webp" alt=""></a>
+            </div>
+        </div>
+        <nav class="col-lg-6 d-lg-flex justify-content-center">
+            <ul id="menu-list" class="nav">
+                <li><a class="text-decoration-none fw-bold" href="{{ url_for('mostrar_recetas') }}">Recetas</a></li>
+                <li><a class="text-decoration-none fw-bold" href="{{ url_for('index') }}#trending">Tendencias</a></li>
+                <li><a class="text-decoration-none fw-bold" href="{{ url_for('crear_receta') }}">Crear receta</a></li>
+            </ul>
+        </nav>
+        <div id="user-large" class="col-lg-3">
+            {% if current_user.is_authenticated %}
+                <div class="user">
+                    <i class="fa-regular fa-user"></i>
+                    <a class="fw-bold text-decoration-none fs-5 text-white" href="{{ url_for('profile') }}">Perfil</a>
+                </div>
+                <div class="user">
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                    <a class="fw-bold text-decoration-none fs-5 text-white" href="{{ url_for('logout') }}">Cerrar sesión</a>
+                </div>
+            {% else %}
+                <div class="user">
+                    <i class="fa-regular fa-user"></i>
+                    <a class="fw-bold text-decoration-none fs-5 text-white" href="{{ url_for('login') }}">Ingresa</a>
+                </div>
+                <div class="user">
+                    <i class="fa-solid fa-plus"></i>
+                    <a class="fw-bold text-decoration-none fs-5 text-white" href="{{ url_for('registro') }}">Registrate</a>
+                </div>
+            {% endif %}
+        </div>
+        <div class="navbar-button col-4 col-lg-4 d-flex justify-content-end">
+            <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+                <i class="fa-solid fa-bars"></i>
+            </button>
+        </div>
+    </div>
+
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar">
+        <div class="offcanvas-header">
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+            <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+                <li><a class="text-black text-decoration-none fw-bold fs-4" href="{{ url_for('mostrar_recetas') }}">Recetas</a></li>
+                <li><a class="text-black text-decoration-none fw-bold fs-4" href="{{ url_for('index') }}#trending">Tendencias</a></li>
+                <li><a class="text-black text-decoration-none fw-bold fs-4" href="{{ url_for('crear_receta') }}">Crear receta</a></li>
+            </ul>
+            {% if current_user.is_authenticated %}
+                <div class="user">
+                    <i class="fa-regular fa-user text-black"></i>
+                    <a class="fw-bold text-decoration-none fs-5 text-black" href="{{ url_for('profile') }}">Perfil</a>
+                </div>
+                <div class="user">
+                    <i class="fa-solid fa-right-from-bracket text-black"></i>
+                    <a class="fw-bold text-decoration-none fs-5 text-black" href="{{ url_for('logout') }}">Cerrar sesión</a>
+                </div>
+            {% else %}
+                <div class="user">
+                    <i class="fa-regular fa-user text-black"></i>
+                    <a class="fw-bold text-decoration-none fs-5 text-black" href="{{ url_for('login') }}">Ingresa</a>
+                </div>
+                <div class="user">
+                    <i class="fa-solid fa-plus text-black"></i>
+                    <a class="fw-bold text-decoration-none fs-5 text-black" href="{{ url_for('registro') }}">Registrate</a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</header>

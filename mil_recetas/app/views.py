@@ -48,7 +48,7 @@ def crear_receta():
                 return jsonify({'error': 'El archivo adjunto no es válido'}), 400
         except Exception as e:
             return jsonify({'error': str(e)}), 500
-    return render_template('crear-receta.html')
+    return render_template('crear-receta.html', title='Crear receta | MilRecetas')
 
 @app.route('/recetas/<int:id_receta>')
 def ver_receta(id_receta):
@@ -56,15 +56,30 @@ def ver_receta(id_receta):
     if receta:
         es_autor = current_user.is_authenticated and current_user.nombre_usuario == receta.autor
         receta_guardada = current_user.is_authenticated and RecetaGuardada.esta_guardada(current_user.id_usuario, id_receta)
-        return render_template('recetas/receta.html', receta=receta, es_autor=es_autor, receta_guardada=receta_guardada)
+        title = f"{receta.nombre_receta} | MilRecetas"
+        return render_template('recetas/receta.html', receta=receta, es_autor=es_autor, receta_guardada=receta_guardada, title=title)
     else:
         return redirect(url_for('not_found'))
 
 @app.route('/recetas/')
 def mostrar_recetas():
-    recetas = Receta.mostrar_todas()
+    page = request.args.get('page', default=1, type=int)
+    per_page = request.args.get('per_page', default=10, type=int)
+    
+    offset = (page - 1) * per_page
+    recetas = Receta.mostrar_todas(offset=offset, limit=per_page)
+    total_recetas = Receta.contar_todas()
+    
     recetas_obj = [Receta(**receta_dict) for receta_dict in recetas]
-    return render_template('recetas/lista-receta.html', recetas=recetas_obj)
+    
+    pagination_info = {
+        'page': page,
+        'per_page': per_page,
+        'total': total_recetas,
+        'total_pages': (total_recetas + per_page - 1) // per_page,
+    }
+    
+    return render_template('recetas/lista-receta.html', recetas=recetas_obj, pagination=pagination_info, title='Todas las recetas | MilRecetas')
 
 @app.route('/eliminar-receta/<int:id_receta>', methods=['GET', 'POST'])
 def eliminar_receta(id_receta):
@@ -77,7 +92,7 @@ def eliminar_receta(id_receta):
         receta.borrar()
         return redirect(url_for('profile'))
     
-    return render_template('confirmar-eliminacion.html', receta=receta)
+    return render_template('confirmar-eliminacion.html', receta=receta, title='Eliminar receta | MilRecetas')
 
 @app.route('/editar/<int:id_receta>', methods=['GET', 'POST'])
 def editar_receta(id_receta):
@@ -94,7 +109,7 @@ def editar_receta(id_receta):
                 pass
         receta.guardar()
         return redirect(url_for('ver_receta', id_receta=id_receta))
-    return render_template('editar-receta.html', receta=receta)
+    return render_template('editar-receta.html', receta=receta, title='Editar receta | MilRecetas')
 
 @app.route('/api/recetas/<int:id_receta>', methods=['GET', 'PUT'])
 def get_receta(id_receta):
@@ -169,27 +184,27 @@ def logout():
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return render_template('index.html', title='MilRecetas | Guarda y comparte recetas')
 
 @app.route('/ingresar')
 def login():
-    return render_template('ingresar.html')
+    return render_template('ingresar.html', title='Ingresa a tu cuenta | MilRecetas')
 
 @app.route('/contacto')
 def contacto():
-    return render_template('contacto.html')
+    return render_template('contacto.html', title='Contacto | MilRecetas')
 
 @app.route('/preguntas-frecuentes')
 def faq():
-    return render_template('faq.html')
+    return render_template('faq.html', title='Preguntas frecuentes | MilRecetas')
 
 @app.route('/sobre-nosotros')
 def nosotros():
-    return render_template('nosotros.html')
+    return render_template('nosotros.html', title='Sobre nosotros | MilRecetas')
 
 @app.route('/registro')
 def registro():
-    return render_template('registro.html')
+    return render_template('registro.html', title='Registrate | MilRecetas')
 
 @app.route('/mi-perfil')
 @login_required
@@ -199,7 +214,8 @@ def profile():
     return render_template('perfil.html', recetas=recetas_usuario,
                             recetas_guardadas=recetas_guardadas,  
                             nombre_usuario=current_user.nombre_usuario,
-                            email=current_user.email)
+                            email=current_user.email,
+                            title='Mi perfil | MilRecetas')
 
 @app.route('/guardar_receta/<int:id_receta>', methods=['POST'])
 @login_required
@@ -221,4 +237,4 @@ def receta_guardada(id_receta):
 
 @app.route('/404/')
 def not_found():
-    return render_template('error.html')
+    return render_template('error.html', title='Error 404 | MilRecetas')

@@ -6,3 +6,6 @@ pyvenv.cfg
 # Archivos generados por Python
 __pycache__/
 *.pyc
+
+# Directorios con imagenes
+/app/static/uploads/recetas/*
